@@ -1,0 +1,68 @@
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import java.util.Arrays;
+import java.util.Random;
+
+public class SimpleGUI extends JFrame {
+
+    private JButton Summ = new JButton("Суммировать");
+    private JTextField input = new JTextField("", 15);
+    private JLabel chisla = new JLabel("10 чисел:");
+    private JCheckBox check = new JCheckBox("Сгенерировать", false);
+
+    public SimpleGUI() {
+        super("Попарное суммирование чисел");
+        this.setBounds(200,150,450,150);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        Container container = this.getContentPane();
+        container.setLayout(new GridLayout(3,2,2,2));
+        container.add(chisla);
+        container.add(input);
+        container.add(check);
+
+        Summ.addActionListener(new ButtonEventListener());
+        container.add(Summ);
+    }
+
+    class ButtonEventListener implements ActionListener {
+
+        public int[] generate(int count, int maxNumber) {
+            int[] arr = new int[count];
+            Random rand = new Random();
+            for (int i = 0; i < count; i++) {
+                arr[i] = rand.nextInt(maxNumber + 1);
+            }
+            return arr;
+        }
+
+        public int[] modify(int[] arr) {
+            int newSize = (int) Math.round(arr.length / 2.0);
+            int[] arrAfterSum = new int[newSize];
+            for (int i = 0; i < arr.length; i++) {
+                arrAfterSum[i / 2] += arr[i];
+            }
+            return arrAfterSum;
+        }
+        public void actionPerformed(ActionEvent e) {
+            String message = "";
+
+                message += "Мы все посчитали :) \n";
+                int[] arr = generate(10, 99);
+                while (arr.length > 1) {
+                    message += (Arrays.toString(arr));
+                    message += ("\n");
+                    arr = modify(arr);
+                }
+                message += (Arrays.toString(arr));
+
+                JOptionPane.showMessageDialog(null, message, "Результат", JOptionPane.PLAIN_MESSAGE);
+        }
+    }
+
+    public static void main(String[] args) {
+        SimpleGUI app = new SimpleGUI();
+        app.setVisible(true);
+    }
+}
